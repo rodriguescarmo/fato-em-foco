@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fato em Foco — A informação merece confiança.</title>
+<style>
+:root{--navy:#0B1F3A;--blue:#1D4ED8;--sky:#7DB7FF;--mist:#E8F1FF;--bg:#F5F8FC;--ok:#10B981;--warn:#F59E0B;--err:#DC2626;--ink:#16263F;--r:16px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font:17px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;color:var(--navy);line-height:1.2;margin:0 0 .5em}
+h1{font-size:clamp(2rem,5vw,3.4rem)}h2{font-size:clamp(1.6rem,3vw,2.2rem)}h3{font-size:1.2rem}
+a{color:var(--blue)}:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header{background:var(--navy);position:sticky;top:0;z-index:9}
+.bar{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:700;font-size:1.15rem}
+nav{display:flex;gap:2px;flex-wrap:wrap}
+nav a{color:#CFE0FA;text-decoration:none;padding:8px 11px;border-radius:8px;font-size:.93rem}
+nav a:hover,nav a.on{background:rgba(125,183,255,.18);color:#fff}
+#burger{display:none;background:none;border:1px solid #3B5683;color:#fff;border-radius:8px;padding:6px 12px;font-size:1rem;cursor:pointer}
+@media(max-width:900px){#burger{display:block}nav{display:none;position:absolute;top:64px;left:0;right:0;background:var(--navy);flex-direction:column;padding:10px 20px 16px}nav.open{display:flex}}
+.btn{display:inline-block;border:0;border-radius:12px;padding:13px 22px;font:600 1rem inherit;font-family:inherit;cursor:pointer;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(29,78,216,.3)}
+.b1{background:var(--blue);color:#fff}.b2{background:transparent;color:#fff;border:2px solid var(--sky)}.b3{background:var(--navy);color:#fff}
+.hero{background:var(--navy);color:#fff;padding:72px 0 80px;position:relative;overflow:hidden}
+.hero h1{color:#fff;max-width:15em}.hero p{max-width:36em;color:#CFE0FA;font-size:1.1rem}
+.hero .lens{position:absolute;right:-60px;top:20px;width:420px;opacity:.9}
+@media(max-width:800px){.hero .lens{opacity:.15;right:-120px}}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+section.pg{display:none;padding:48px 0 64px}section.pg.on{display:block}
+.pg>.wrap>.lead{max-width:44em;font-size:1.1rem}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin:24px 0}
+.card{background:#fff;border:1px solid #DCE6F4;border-radius:var(--r);padding:22px;box-shadow:0 2px 8px rgba(11,31,58,.05)}
+.card h3{margin-bottom:.3em}.card p{margin:.3em 0}
+.tag{display:inline-block;background:var(--mist);color:var(--blue);border-radius:99px;padding:2px 12px;font-size:.82rem;font-weight:600;margin-bottom:8px}
+.ex{background:var(--mist);border-left:4px solid var(--blue);padding:10px 14px;border-radius:8px;font-size:.95rem;margin-top:10px}
+.ex b{color:var(--navy)}
+.band{background:var(--mist);padding:44px 0}
+.avatar{width:84px;height:84px;border-radius:50%;background:var(--mist);border:2px dashed var(--sky);display:grid;place-items:center;margin-bottom:12px}
+.role{color:var(--blue);font-weight:700;font-size:.92rem}
+details{background:#fff;border:1px solid #DCE6F4;border-radius:var(--r);padding:14px 20px;margin:10px 0}
+summary{cursor:pointer;font-weight:600;color:var(--navy)}details[open] summary{margin-bottom:6px}
+form{background:#fff;border:1px solid #DCE6F4;border-radius:var(--r);padding:26px;max-width:720px}
+label{display:block;font-weight:600;margin:16px 0 5px;color:var(--navy)}label small{font-weight:400;color:#5A6C87}
+input,select,textarea{width:100%;padding:11px 13px;border:1.5px solid #B8C8E0;border-radius:10px;font:inherit;background:#fff}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);outline:none;box-shadow:0 0 0 3px rgba(29,78,216,.18)}
+.err{color:var(--err);font-size:.88rem;min-height:1.2em;margin-top:3px}
+.invalid{border-color:var(--err)}
+.notice{background:#FFF7E6;border:1px solid #F5D08A;border-radius:12px;padding:12px 16px;font-size:.93rem;margin:16px 0}
+.done{background:#E7F8F1;border:1px solid #8FDDBF;border-radius:12px;padding:20px;max-width:720px}
+.hp{position:absolute;left:-9999px}
+.chk{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid #DCE6F4;border-radius:12px;padding:12px 16px;margin:8px 0;cursor:pointer}
+.chk input{width:22px;height:22px;margin-top:3px;accent-color:var(--blue)}
+.prog{height:12px;background:#D6E3F6;border-radius:99px;overflow:hidden;margin:14px 0 8px}
+.prog i{display:block;height:100%;width:0;background:var(--ok);transition:width .35s}
+.msg{background:#fff;border:1px dashed var(--sky);border-radius:12px;padding:14px;margin:10px 0}
+.msg button{margin-top:8px}
+table{border-collapse:collapse;width:100%}
+.pf{counter-reset:p}.pf .card h3::before{counter-increment:p;content:counter(p)". ";color:var(--blue)}
+footer{background:var(--navy);color:#CFE0FA;padding:40px 0 24px;font-size:.93rem}
+footer a{color:#fff}footer .cols{display:grid;gap:24px;grid-template-columns:2fr 1fr 1fr}
+@media(max-width:700px){footer .cols{grid-template-columns:1fr}}
+.ph{padding:12px;border:1px dashed #8AA3C7;border-radius:10px;color:#5A6C87;font-size:.9rem}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs><symbol id="logo" viewBox="0 0 64 64"><circle cx="27" cy="27" r="20" fill="none" stroke="#7DB7FF" stroke-width="5"/><path d="M42 42l16 16" stroke="#7DB7FF" stroke-width="6" stroke-linecap="round"/><path d="M27 14l12 4v8c0 8-5 13-12 16-7-3-12-8-12-16v-8z" fill="#1D4ED8"/><path d="M21 27l5 5 9-10" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></symbol></defs></svg>
+<header><div class="wrap bar">
+<a class="brand" href="#inicio"><svg width="38" height="38"><use href="#logo"/></svg>Fato em Foco</a>
+<button id="burger" aria-label="Abrir menu" aria-expanded="false">Menu</button>
+<nav id="nav" aria-label="Principal"></nav>
+</div></header>
+
+<main>
+<section class="pg" id="inicio">
+<div class="hero"><svg class="lens" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
+<div class="wrap"><h1>Em um mundo cheio de informações, saber o que é verdade faz toda a diferença.</h1>
+<p>O Fato em Foco é uma plataforma de educação digital que ensina a identificar fake news, a verificar informações antes de compartilhar e a ajudar outras pessoas a não caírem em desinformação.</p>
+<div class="cta"><a class="btn b1" href="#nao-caia-nessa">Aprenda a identificar fake news</a><a class="btn b2" href="#denuncias">Denuncie uma informação suspeita</a></div></div></div>
+<div class="wrap" style="padding-top:48px">
+<div class="grid">
+<div class="card"><h3>O que é o Fato em Foco?</h3><p>Um projeto de conscientização que reúne conteúdo educativo, um guia prático de verificação e um canal para relatar conteúdos suspeitos.</p></div>
+<div class="card"><h3>Por que combater a desinformação?</h3><p>Informação falsa pode prejudicar a saúde, a convivência e as decisões das pessoas. Verificar antes de compartilhar protege a todos.</p></div>
+<div class="card"><h3>Como identificar uma notícia falsa?</h3><p>Observe o título, a fonte, a data e as imagens, e procure o mesmo fato em outros veículos confiáveis. <a href="#nao-caia-nessa">Veja o guia completo.</a></p></div>
+<div class="card"><h3>Como podemos ajudar?</h3><p>Ensinando o método de checagem e mostrando como conversar com quem compartilhou algo falso, sem briga. <a href="#ajude-outros">Saiba como.</a></p></div>
+</div></div>
+<div class="band"><div class="wrap"><h2>Nossas principais ferramentas</h2>
+<div class="grid">
+<a class="card" href="#aprenda" style="text-decoration:none;color:inherit"><h3>Central Educativa</h3><p>11 temas explicados de forma simples.</p></a>
+<a class="card" href="#nao-caia-nessa" style="text-decoration:none;color:inherit"><h3>Não Caia Nessa</h3><p>Guia de 9 passos e checklist interativo.</p></a>
+<a class="card" href="#denuncias" style="text-decoration:none;color:inherit"><h3>Central de Denúncias</h3><p>Relate conteúdos para verificação.</p></a>
+<a class="card" href="#sugestoes" style="text-decoration:none;color:inherit"><h3>Sua Opinião Importa</h3><p>Envie ideias para melhorar o projeto.</p></a>
+</div></div></div>
+<div class="wrap" style="padding:48px 20px"><h2>Participe</h2><p class="lead">Compartilhar só depois de verificar é o primeiro passo. O segundo é ajudar quem está perto de você a fazer o mesmo.</p>
+<a class="btn b3" href="#sugestoes">Envie sua sugestão</a> <a class="btn b1" href="#equipe">Conheça a equipe</a></div>
+</section>
+
+<section class="pg" id="sobre"><div class="wrap">
+<h1>Conheça o Fato em Foco</h1>
+<p class="lead">O Fato em Foco nasceu como um projeto de quatro integrantes que querem uma internet mais consciente. A desinformação é um problema social: ela se espalha rápido, confunde e pode causar danos reais. A educação digital é a forma mais duradoura de enfrentá-la, porque ensina cada pessoa a verificar por conta própria.</p>
+<div class="grid">
+<div class="card"><span class="tag">Missão</span><p>Promover a conscientização sobre a desinformação e incentivar a verificação responsável das informações.</p></div>
+<div class="card"><span class="tag">Visão</span><p>Contribuir para uma sociedade mais informada, crítica e consciente diante dos conteúdos compartilhados na internet.</p></div>
+<div class="card"><span class="tag">Valores</span><p>Responsabilidade, transparência, respeito, ética, conhecimento, segurança e compromisso com a informação.</p></div>
+</div>
+<h2>Objetivos</h2>
+<div class="grid"><div class="card"><h3>Geral</h3><p>Ensinar o público a reconhecer e evitar a desinformação, formando pessoas que compartilham com responsabilidade.</p></div>
+<div class="card"><h3>Específicos</h3><p>Explicar os conceitos de desinformação; oferecer um guia prático de verificação; ensinar a orientar outras pessoas com respeito; receber relatos de conteúdos suspeitos para verificação; ouvir sugestões do público.</p></div></div>
+</div></section>
+
+<section class="pg" id="equipe"><div class="wrap">
+<h1>Nossa Equipe</h1><p class="lead">As pessoas responsáveis pelo desenvolvimento e pela organização da plataforma.</p>
+<div class="grid" id="team"></div>
+</div></section>
+
+<section class="pg" id="aprenda"><div class="wrap">
+<h1>Central Educativa</h1><p class="lead">Aprenda o essencial sobre desinformação. Os exemplos são ilustrativos e foram criados para ensinar; não são casos reais.</p>
+<div id="topics"></div>
+</div></section>
+
+<section class="pg" id="nao-caia-nessa"><div class="wrap">
+<h1>Não Caia Nessa</h1><p class="lead">Nove passos para checar uma informação. Toque em cada cartão para ver como aplicar.</p>
+<div id="steps"></div>
+<h2 style="margin-top:40px">Antes de compartilhar, verifique!</h2>
+<p>Marque o que você já conferiu. Esta lista ensina o método; ela não diz se a notícia é verdadeira ou falsa.</p>
+<div id="checklist"></div>
+<div class="prog" aria-hidden="true"><i id="bar"></i></div><p id="cres" aria-live="polite"><b>0 de 9 conferências feitas.</b></p>
+</div></section>
+
+<section class="pg" id="ajude-outros"><div class="wrap">
+<h1>Ajude outras pessoas a não caírem</h1><p class="lead">Quem corrige com respeito é ouvido. Quem corrige com ironia vira inimigo.</p>
+<div class="grid">
+<div class="card"><h3>Familiares e amigos</h3><p>Escolha uma conversa privada, não o grupo. Pergunte de onde veio a mensagem antes de dizer que está errada.</p></div>
+<div class="card"><h3>Corrigir com respeito</h3><p>Fale do conteúdo, não da pessoa. Reconheça que é fácil se enganar e mostre uma fonte confiável.</p></div>
+<div class="card"><h3>Crianças e adolescentes</h3><p>Incentive perguntas como "quem fez isso?" e "como eu sei que é verdade?". Verifiquem juntos.</p></div>
+<div class="card"><h3>Adultos e idosos</h3><p>Mostre o passo a passo de uma checagem em vez de só dizer "isso é falso". Tenha paciência.</p></div>
+<div class="card"><h3>Evitar conflito</h3><p>Não discuta em público, não use tom de superioridade e aceite que a pessoa pode precisar de tempo.</p></div>
+<div class="card"><h3>Incentivar a verificação</h3><p>Transforme em hábito da família: "vamos conferir antes de enviar?".</p></div>
+</div>
+<h2>Mensagens prontas</h2>
+<div id="msgs"></div>
+</div></section>
+
+<section class="pg" id="denuncias"><div class="wrap">
+<h1>Central de Denúncias</h1><p class="lead">Viu algo que parece falso? Conte para nós. Seu relato será tratado como uma informação que precisa de verificação.</p>
+<div class="notice"><b>Importante:</b> uma denúncia não é uma conclusão sobre a veracidade do conteúdo. Nada é publicado automaticamente e nenhuma notícia é classificada como falsa só porque alguém a denunciou. Não envie dados pessoais de terceiros.</div>
+<div class="notice"><b>Modo demonstração:</b> nesta versão os relatos ficam guardados apenas neste navegador, e não em um servidor.</div>
+<form id="fd" novalidate>
+<label for="d-nome">Nome <small>(opcional)</small></label><input id="d-nome" maxlength="80">
+<label for="d-email">E-mail para contato <small>(opcional)</small></label><input id="d-email" type="email" maxlength="120"><div class="err"></div>
+<label for="d-link">Link da publicação ou notícia</label><input id="d-link" type="url" placeholder="https://" required maxlength="500"><div class="err"></div>
+<label for="d-plat">Plataforma onde viu</label><select id="d-plat" required><option value="">Selecione</option><option>WhatsApp</option><option>Instagram</option><option>Facebook</option><option>TikTok</option><option>YouTube</option><option>X (Twitter)</option><option>Site ou blog</option><option>Outra</option></select><div class="err"></div>
+<label for="d-cat">Categoria</label><select id="d-cat" required><option value="">Selecione</option><option>Saúde</option><option>Política e eleições</option><option>Golpes e fraudes</option><option>Imagem ou vídeo fora de contexto</option><option>Ciência e tecnologia</option><option>Outra</option></select><div class="err"></div>
+<label for="d-desc">Descrição da informação suspeita</label><textarea id="d-desc" rows="4" required maxlength="1500"></textarea><div class="err"></div>
+<label for="d-motivo">Por que você considera suspeita?</label><textarea id="d-motivo" rows="3" required maxlength="1500"></textarea><div class="err"></div>
+<label for="d-extra">Informações adicionais <small>(opcional)</small></label><textarea id="d-extra" rows="2" maxlength="1000"></textarea>
+<input class="hp" id="d-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+<label class="chk" style="margin-top:18px"><input type="checkbox" id="d-ok"><span>Concordo em enviar estes dados para análise da equipe, conforme a LGPD, e não incluí dados pessoais de terceiros.</span></label><div class="err"></div>
+<button class="btn b1" type="submit" style="margin-top:12px;font-size:1.05rem">Enviar denúncia</button>
+</form><div id="fd-ok" class="done" hidden></div>
+</div></section>
+
+<section class="pg" id="sugestoes"><div class="wrap">
+<h1>Sua Opinião Importa</h1><p class="lead">Ajude a melhorar o Fato em Foco com suas ideias.</p>
+<div class="notice"><b>Modo demonstração:</b> as sugestões ficam guardadas apenas neste navegador.</div>
+<form id="fs" novalidate>
+<label for="s-nome">Nome <small>(opcional)</small></label><input id="s-nome" maxlength="80">
+<label for="s-email">E-mail <small>(opcional)</small></label><input id="s-email" type="email" maxlength="120"><div class="err"></div>
+<label for="s-cat">Categoria</label><select id="s-cat" required><option value="">Selecione</option><option>Melhorias no site</option><option>Novas funcionalidades</option><option>Novos conteúdos educativos</option><option>Sugestões de campanhas</option><option>Ideias para combater fake news</option><option>Outros assuntos</option></select><div class="err"></div>
+<label for="s-desc">Descrição da ideia</label><textarea id="s-desc" rows="5" required maxlength="1500"></textarea><div class="err"></div>
+<input class="hp" id="s-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+<button class="btn b1" type="submit" style="margin-top:16px">Enviar sugestão</button>
+</form><div id="fs-ok" class="done" hidden></div>
+</div></section>
+
+<section class="pg" id="conteudos"><div class="wrap">
+<h1>Conteúdos</h1><p class="lead">Dicas e orientações por categoria. Novos materiais serão adicionados pela equipe.</p>
+<div class="grid">
+<div class="card"><span class="tag">Dicas de verificação</span><h3>Busca reversa de imagens</h3><p>Ferramentas de busca por imagem mostram onde uma foto apareceu antes e ajudam a descobrir se ela está fora de contexto.</p></div>
+<div class="card"><span class="tag">Segurança digital</span><h3>Desconfie de pressa e prêmios</h3><p>Mensagens que exigem ação imediata ou prometem prêmios costumam ser golpes. Não clique em links desconhecidos.</p></div>
+<div class="card"><span class="tag">Checagem de fatos</span><h3>Agências de checagem</h3><p>Pesquise o assunto no nome de agências de checagem brasileiras reconhecidas antes de compartilhar.</p></div>
+<div class="card"><span class="tag">Campanhas</span><h3>Pause antes de enviar</h3><p>Campanha do projeto: antes de apertar "enviar", respire e confira a fonte.</p></div>
+</div>
+<div class="ph">Notícias já verificadas por fontes confiáveis serão listadas aqui, sempre com link para a checagem original.</div>
+</div></section>
+
+<section class="pg" id="portfolio"><div class="wrap">
+<h1>Portfólio institucional</h1><p class="lead">O Fato em Foco apresentado como projeto de tecnologia e conscientização social.</p>
+<div class="grid pf" id="pf"></div>
+</div></section>
+
+<section class="pg" id="privacidade"><div class="wrap">
+<h1>Privacidade (LGPD)</h1>
+<p class="lead">Coletamos apenas o que você digitar nos formulários, e nome e e-mail são sempre opcionais. Nesta versão de demonstração, os dados ficam somente no navegador do aparelho usado. Dados de denunciantes e de terceiros nunca são exibidos publicamente. Para pedir exclusão de dados, o canal de contato oficial será divulgado pela equipe.</p>
+</div></section>
+</main>
+
+<footer><div class="wrap"><div class="cols">
+<div><b style="color:#fff;font-size:1.1rem"><svg width="26" height="26" style="vertical-align:-6px"><use href="#logo"/></svg> Fato em Foco</b><br><i>A informação merece confiança.</i><p>Plataforma de educação digital contra a desinformação.</p><p>Canais de contato serão divulgados em breve.</p></div>
+<div><b style="color:#fff">Navegue</b><br><a href="#aprenda">Central Educativa</a><br><a href="#denuncias">Central de Denúncias</a><br><a href="#sugestoes">Sua Opinião Importa</a></div>
+<div><b style="color:#fff">Institucional</b><br><a href="#sobre">Sobre nós</a><br><a href="#portfolio">Portfólio</a><br><a href="#privacidade">Privacidade</a></div>
+</div><p style="margin-top:24px;border-top:1px solid #243B5E;padding-top:14px">© 2026 Fato em Foco. Projeto educativo.</p></div></footer>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pages=[['inicio','Início'],['sobre','Sobre'],['equipe','Equipe'],['aprenda','Aprenda'],['nao-caia-nessa','Não Caia Nessa'],['ajude-outros','Ajude outros'],['conteudos','Conteúdos'],['denuncias','Denúncias'],['sugestoes','Sugestões'],['portfolio','Portfólio']];
+$('#nav').innerHTML=pages.map(p=>`<a href="#${p[0]}" data-p="${p[0]}">${p[1]}</a>`).join('');
+function route(){let id=location.hash.slice(1);if(!$('#'+id)||!$('#'+id).classList.contains('pg'))id='inicio';
+$$('.pg').forEach(s=>s.classList.toggle('on',s.id===id));$$('nav a').forEach(a=>a.classList.toggle('on',a.dataset.p===id));
+$('#nav').classList.remove('open');$('#burger').setAttribute('aria-expanded','false');window.scrollTo(0,0);document.title=(pages.find(p=>p[0]===id)||['','Início'])[1]+' — Fato em Foco'}
+addEventListener('hashchange',route);route();
+$('#burger').onclick=()=>{const o=$('#nav').classList.toggle('open');$('#burger').setAttribute('aria-expanded',o)};
+
+const team=[['Letícia','CEO (Chief Executive Officer)','Direção executiva, organização estratégica, acompanhamento do desenvolvimento e decisões sobre os objetivos gerais do projeto.'],['Mayara','CEO (Chief Executive Officer)','Direção executiva, planejamento, acompanhamento das atividades e organização estratégica do projeto.'],['Alice','Diretora','Organização institucional, acompanhamento das atividades, coordenação e desenvolvimento das iniciativas do projeto.'],['Murilo','CTO — Diretor de Tecnologia','Direção tecnológica, desenvolvimento do site, estrutura técnica, funcionalidades, organização do código e manutenção da plataforma.']];
+$('#team').innerHTML=team.map(t=>`<div class="card"><div class="avatar" role="img" aria-label="Espaço reservado para a foto de ${t[0]}"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7DB7FF" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div><h3>${t[0]}</h3><div class="role">${t[1]}</div><p>${t[2]}</p></div>`).join('');
+
+const topics=[
+['O que são fake news?','Notícias falsas apresentadas como se fossem verdadeiras, geralmente para enganar, atrair cliques ou influenciar opiniões.','"URGENTE: remédio caseiro cura tudo em 2 dias!" Sem fonte, sem autor, sem data.'],
+['O que é desinformação?','É informação falsa ou enganosa criada e espalhada de propósito, com a intenção de causar algum efeito.','Um boato inventado para assustar pessoas e fazê-las compartilhar.'],
+['Desinformação x informação incorreta','Informação incorreta é um erro sem intenção de enganar. Desinformação é intencional. Os dois podem causar dano, e os dois pedem verificação.','Alguém repassa um horário errado por engano (incorreta). Alguém inventa o horário para confundir (desinformação).'],
+['Como as notícias falsas são produzidas?','Muitas imitam o visual de sites sérios, misturam fatos reais com mentiras ou usam títulos que provocam emoção forte.','Um site com nome parecido com o de um jornal conhecido, mas com endereço diferente.'],
+['Como se espalham nas redes?','Conteúdos que causam raiva, medo ou surpresa são compartilhados mais rápido. Grupos de mensagens e o "repasse sem ler" aceleram tudo.','Uma mensagem em cadeia que termina com "mande para todos os seus contatos".'],
+['Por que as pessoas acreditam?','Tendemos a aceitar o que combina com o que já pensamos, o que vem de pessoas conhecidas e o que provoca emoção.','"Meu primo mandou, então deve ser verdade."'],
+['Impactos na sociedade','A desinformação pode afetar a saúde, causar golpes, aumentar a intolerância e diminuir a confiança nas instituições.','Um boato sobre saúde faz alguém deixar de procurar atendimento adequado.'],
+['Prejuízo a pessoas e comunidades','Boatos podem expor pessoas inocentes, gerar pânico em uma comunidade e levar a decisões erradas.','Uma acusação falsa contra um morador se espalha pelo grupo do bairro.'],
+['Imagens e vídeos fora de contexto','Uma foto verdadeira pode ser usada com legenda falsa. Um vídeo antigo pode ser apresentado como se fosse atual.','Foto de uma chuva antiga com a legenda "aconteceu hoje".'],
+['Títulos sensacionalistas','Títulos em maiúsculas, com muitos pontos de exclamação e promessas exageradas costumam buscar clique, não informar.','"VOCÊ NÃO VAI ACREDITAR!!! O que eles escondem de você"'],
+['Importância das fontes confiáveis','Fontes confiáveis identificam autores, citam documentos, corrigem erros e podem ser verificadas por outros veículos.','Uma matéria com data, autor, fontes citadas e contato do veículo.']];
+$('#topics').innerHTML=topics.map((t,i)=>`<details ${i?'':'open'}><summary>${t[0]}</summary><p>${t[1]}</p><div class="ex"><b>Exemplo ilustrativo:</b> ${t[2]}</div></details>`).join('');
+
+const steps=[
+['Desconfie de títulos exagerados','Maiúsculas, exclamações e promessas absurdas são sinal de alerta.'],
+['Verifique quem publicou','Procure o nome do site ou da pessoa. Há autor, contato e histórico?'],
+['Procure em outros veículos confiáveis','Se o fato é importante, vários veículos sérios vão noticiar.'],
+['Confira a data','Notícias antigas costumam voltar como se fossem novas.'],
+['Leia a notícia completa','O título pode dizer uma coisa e o texto outra.'],
+['Veja se imagens e vídeos combinam com o contexto','Faça uma busca reversa da imagem para descobrir a origem.'],
+['Procure fontes e documentos','Uma boa matéria diz de onde tirou os dados e permite conferir.'],
+['Procure serviços de checagem de fatos','Pesquise o assunto junto com a palavra "checagem".'],
+['Não compartilhe antes de verificar','Na dúvida, não envie. Esperar alguns minutos evita um grande estrago.']];
+$('#steps').innerHTML=steps.map((s,i)=>`<details><summary>Passo ${i+1}: ${s[0]}</summary><p>${s[1]}</p></details>`).join('');
+$('#checklist').innerHTML=steps.map((s,i)=>`<label class="chk"><input type="checkbox" class="ck"><span>${s[0]}</span></label>`).join('');
+function prog(){const n=$$('.ck:checked').length;$('#bar').style.width=n/9*100+'%';
+$('#cres').innerHTML='<b>'+n+' de 9 conferências feitas.</b> '+(n==9?'Você seguiu todo o método. Mesmo assim, compartilhe com responsabilidade.':n>=5?'Quase lá. Ainda faltam verificações.':'Ainda faltam verificações. Evite compartilhar por enquanto.')}
+$$('.ck').forEach(c=>c.onchange=prog);
+
+const msgs=[['Grupo da família','Oi! Vi que essa mensagem circulou. Fui conferir e não achei nada sério sobre isso. Olha o que encontrei aqui: [link da checagem]. Melhor esperarmos confirmar antes de repassar, né?'],['Amigo ou colega','Ei, tudo bem? Fiquei na dúvida sobre essa notícia e fui procurar a fonte. Achei que ela está fora de contexto. Quer ver comigo?'],['Para um adolescente','Achei curioso esse vídeo! Vamos descobrir de onde ele veio? Vale uma busca rápida antes de mandar para a turma.']];
+$('#msgs').innerHTML=msgs.map((m,i)=>`<div class="msg"><b>${m[0]}</b><p>${m[1]}</p><button class="btn b3" data-i="${i}">Copiar mensagem</button></div>`).join('');
+$$('.msg button').forEach(b=>b.onclick=async()=>{const t=msgs[b.dataset.i][1];try{await navigator.clipboard.writeText(t);b.textContent='Mensagem copiada!'}catch(e){const a=document.createElement('textarea');a.value=t;document.body.append(a);a.select();document.execCommand('copy');a.remove();b.textContent='Mensagem copiada!'}setTimeout(()=>b.textContent='Copiar mensagem',2000)});
+
+const pf=[['Apresentação do projeto','Plataforma de educação digital contra a desinformação.'],['Identidade visual','Logotipo de lupa com escudo e check; azul-marinho, azul-claro e branco.'],['História e motivação','Quatro integrantes que querem uma internet mais consciente.'],['Problema identificado','A desinformação se espalha rápido e prejudica pessoas e comunidades.'],['Justificativa','Educar para verificar é a forma mais duradoura de reduzir o problema.'],['Objetivo geral','Formar pessoas que compartilham informação com responsabilidade.'],['Objetivos específicos','Explicar conceitos, ensinar o método, receber relatos e ouvir sugestões.'],['Missão','Promover a conscientização e a verificação responsável.'],['Visão','Uma sociedade mais informada, crítica e consciente.'],['Valores','Responsabilidade, transparência, respeito, ética, conhecimento, segurança e compromisso com a informação.'],['Público-alvo','Estudantes, famílias e qualquer pessoa que use a internet.'],['Soluções propostas','Central educativa, guia interativo, denúncias e sugestões.'],['Funcionalidades desenvolvidas','Guia com checklist, formulários validados, mensagens prontas e navegação responsiva.'],['Estrutura tecnológica','HTML, CSS e JavaScript, publicado no GitHub Pages. Evolução prevista: banco de dados e login.'],['Organização da equipe','Duas CEOs, uma diretora e um CTO.'],['Responsabilidades','Direção estratégica (Letícia e Mayara), coordenação (Alice), tecnologia (Murilo).'],['Benefícios esperados','Pessoas mais atentas e conversas mais respeitosas sobre informação.'],['Impacto social','Contribuir para uma internet mais consciente, sem prometer números.'],['Possibilidades de expansão','Banco de dados, área administrativa, mais conteúdos e campanhas.'],['Considerações finais','Combater a desinformação é tarefa coletiva, e começa em cada compartilhamento.']];
+$('#pf').innerHTML=pf.map(p=>`<div class="card"><h3>${p[0]}</h3><p>${p[1]}</p></div>`).join('');
+
+function save(k,o){try{const a=JSON.parse(localStorage.getItem(k)||'[]');a.push(o);localStorage.setItem(k,JSON.stringify(a));return true}catch(e){return false}}
+const rate=(k)=>{const t=+localStorage.getItem(k+'_t')||0;if(Date.now()-t<10000)return false;try{localStorage.setItem(k+'_t',Date.now())}catch(e){}return true};
+function setErr(el,m){el.classList.toggle('invalid',!!m);const e=el.parentElement.querySelector('.err')||el.nextElementSibling;let d=el.nextElementSibling;while(d&&!d.classList.contains('err'))d=d.nextElementSibling;if(d)d.textContent=m||''}
+function check(f,rules){let ok=true,first=null;rules.forEach(([id,fn])=>{const el=$('#'+id),m=fn(el.type==='checkbox'?el.checked:el.value.trim());setErr(el,m);if(m){ok=false;first=first||el}});if(first)first.focus();return ok}
+const req=m=>v=>v?'':m,mail=v=>v&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)?'Digite um e-mail válido.':'';
+const link=v=>{if(!v)return'Informe o link do conteúdo.';try{const u=new URL(v);return/^https?:$/.test(u.protocol)?'':'Use um link que comece com http:// ou https://.'}catch(e){return'Digite um link válido, como https://exemplo.com.'}};
+const min=(n,m)=>v=>v.length>=n?'':m;
+const sens=/\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b|\(?\d{2}\)?\s?9?\d{4}-?\d{4}/;
+function ok(id,fid,title,proto){const b=$(id);b.hidden=false;b.innerHTML=`<h3>${title}</h3><p>Seu protocolo: <b>${proto}</b></p><p>${fid==='d'?'Recebemos seu relato. Ele será tratado como uma informação que precisa de verificação, e não como conclusão sobre o conteúdo.':'Obrigado por contribuir com o Fato em Foco!'}</p><p><small>Modo demonstração: guardado só neste navegador.</small></p><button class="btn b3" id="again">Enviar outro</button>`;$('#f'+fid).hidden=true;b.scrollIntoView({block:'center'});$('#again').onclick=()=>{b.hidden=true;$('#f'+fid).hidden=false;$('#f'+fid).reset()}}
+$('#fd').onsubmit=e=>{e.preventDefault();if($('#d-hp').value)return;
+if(!check(e.target,[['d-email',mail],['d-link',link],['d-plat',req('Escolha a plataforma.')],['d-cat',req('Escolha a categoria.')],['d-desc',min(20,'Descreva com pelo menos 20 caracteres.')],['d-motivo',min(10,'Explique o motivo em pelo menos 10 caracteres.')],['d-ok',v=>v?'':'É preciso concordar para enviar.']]))return;
+const txt=$('#d-desc').value+' '+$('#d-motivo').value+' '+$('#d-extra').value;
+if(sens.test(txt)&&!confirm('Seu texto parece conter CPF ou telefone. Não envie dados pessoais de terceiros. Deseja enviar mesmo assim?'))return;
+if(!rate('fd')){alert('Aguarde alguns segundos antes de enviar outra denúncia.');return}
+const p='FF-'+Date.now().toString(36).toUpperCase();
+if(!save('ff_denuncias',{p,status:'pendente',data:new Date().toISOString(),nome:$('#d-nome').value.trim(),email:$('#d-email').value.trim(),link:$('#d-link').value.trim(),plat:$('#d-plat').value,cat:$('#d-cat').value,desc:$('#d-desc').value.trim(),motivo:$('#d-motivo').value.trim(),extra:$('#d-extra').value.trim()})){alert('Não foi possível guardar neste navegador.');return}
+ok('#fd-ok','d','Denúncia recebida',p)};
+$('#fs').onsubmit=e=>{e.preventDefault();if($('#s-hp').value)return;
+if(!check(e.target,[['s-email',mail],['s-cat',req('Escolha a categoria.')],['s-desc',min(10,'Descreva sua ideia com pelo menos 10 caracteres.')]]))return;
+if(!rate('fs')){alert('Aguarde alguns segundos antes de enviar outra sugestão.');return}
+const p='SG-'+Date.now().toString(36).toUpperCase();
+save('ff_sugestoes',{p,data:new Date().toISOString(),nome:$('#s-nome').value.trim(),email:$('#s-email').value.trim(),cat:$('#s-cat').value,desc:$('#s-desc').value.trim()});
+ok('#fs-ok','s','Sugestão recebida',p)};
+</script>
+</body>
+</html>
